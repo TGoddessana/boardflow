@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('board-api/', include('board_app.urls'))
+    path('api/v1/boardflow/', include('board_app.urls'))
 ]
 
 if settings.DEBUG:
