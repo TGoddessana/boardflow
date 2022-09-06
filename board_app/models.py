@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -27,8 +28,20 @@ class BoardFlowPost(TimeStampedModel):
     """
     title = models.CharField(max_length=20)
     content = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+    password = models.CharField(max_length=200, blank=False, null=False)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     def __str__(self):
         return f'<BoardFlowPost Object:{self.title}>'
+
+    def save(self, *args, **kwargs):
+        """
+        비밀번호 암호화를 위해 save() 메서드를 오버라이딩
+        모델 객체에 password 멤버 변수가 있으면,
+        password 를 암호화 한 후 저장
+        """
+        if self.password:
+            password = make_password(self.password)
+            self.password = password
+
+        return super().save(*args, **kwargs)
