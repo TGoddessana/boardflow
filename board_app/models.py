@@ -29,3 +29,6 @@ class BoardFlowPost(TimeStampedModel):
     content = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'<BoardFlowPost Object:{self.title}>'
