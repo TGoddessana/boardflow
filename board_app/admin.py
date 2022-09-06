@@ -1,3 +1,6 @@
 from django.contrib import admin
+from board_app.models import BoardFlowPost
 
-# Register your models here.
+@admin.register(BoardFlowPost)
+class BoardFlowPost(admin.ModelAdmin):
+    pass
