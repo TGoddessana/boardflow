@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from board_app.models import BoardFlowPost
-from django.contrib.auth.hashers import check_password
 
 
 class BoardFlowPostSerializer(serializers.ModelSerializer):
@@ -21,16 +20,21 @@ class BoardFlowPostSerializer(serializers.ModelSerializer):
                   "password",
                   "author_name"]
 
-    # def update(self, instance, validated_data):
+    def validate_password(self, value):
         """
-        serialzer 로부터 검증된 데이터를 받아 게시물을 수정
-        update 시, 비밀번호가 일치하지 않는다면 에러
+        클라이언트로부터 들어온 password 데이터가 아래 조건에 맞는지 검증한다.
+        1. 비밀번호는 6자 이상인가?
+        2. 숫자가 무조건 한 개 이상 포함되어 있는가?
 
         Args:
-            instance: BoardFlowPost 의 객체
-            validated_data: serializer 에서 검증된 데이터
+            value: password
+
+        Returns: 비밀번호 검증이 성공한다면 비밀번호 값을, 아니라면 ValidationError 를 발생시킨다.
 
         """
-        # print(check_password(validated_data.get('password'), instance.password))
-        # if check_password(validated_data.get('password'), instance.password):
-        #     return super().update(instance, validated_data)
+
+        if len(value) < 6:
+            raise serializers.ValidationError("비밀번호는 최소 6자 이상이어야 합니다.")
+        elif not any(char.isdigit() for char in value):
+            raise serializers.ValidationError('비밀번호에는 최소 한 개의 숫자가 포함되어야 합니다.')
+        return value
