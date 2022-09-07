@@ -5,6 +5,10 @@ from board_app.serializers import BoardFlowPostSerializer
 
 
 class BoardFlowPostViewSet(ModelViewSet):
+    """
+    정렬을 위해서 queryset -> order_by('-pk')
+    permission_classes -> 게시판 비밀번호 검증 로직 적용
+    """
     queryset = BoardFlowPost.objects.all().order_by('-pk')
     serializer_class = BoardFlowPostSerializer
     permission_classes = (BoardFlowPostPermission,)
@@ -15,3 +19,13 @@ class BoardFlowPostViewSet(ModelViewSet):
         """
         serializer.save(author=self.request.user)
         return super().perform_create(serializer)
+
+    def get_serializer_context(self):
+        """
+
+        serializer 에 추가 context 제공
+
+        """
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context

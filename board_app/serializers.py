@@ -32,9 +32,10 @@ class BoardFlowPostSerializer(serializers.ModelSerializer):
         Returns: 비밀번호 검증이 성공한다면 비밀번호 값을, 아니라면 ValidationError 를 발생시킨다.
 
         """
-
-        if len(value) < 6:
-            raise serializers.ValidationError("비밀번호는 최소 6자 이상이어야 합니다.")
-        elif not any(char.isdigit() for char in value):
-            raise serializers.ValidationError('비밀번호에는 최소 한 개의 숫자가 포함되어야 합니다.')
-        return value
+        if "request" in self.context:
+            # print(bool(self.context['request'].data['password']))
+            if len(value) < 6:
+                raise serializers.ValidationError("비밀번호는 최소 6자 이상이어야 합니다.")
+            elif not any(char.isdigit() for char in value):
+                raise serializers.ValidationError('비밀번호에는 최소 한 개의 숫자가 포함되어야 합니다.')
+            return value
