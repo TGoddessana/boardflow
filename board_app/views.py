@@ -1,11 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 from board_app.models import BoardFlowPost
+from board_app.permissions import BoardFlowPostPermission
 from board_app.serializers import BoardFlowPostSerializer
 
 
 class BoardFlowPostViewSet(ModelViewSet):
     queryset = BoardFlowPost.objects.all()
     serializer_class = BoardFlowPostSerializer
+    permission_classes = (BoardFlowPostPermission, )
 
     def perform_create(self, serializer):
         """
