@@ -5,9 +5,9 @@ from board_app.serializers import BoardFlowPostSerializer
 
 
 class BoardFlowPostViewSet(ModelViewSet):
-    queryset = BoardFlowPost.objects.all()
+    queryset = BoardFlowPost.objects.all().order_by('-pk')
     serializer_class = BoardFlowPostSerializer
-    permission_classes = (BoardFlowPostPermission, )
+    permission_classes = (BoardFlowPostPermission,)
 
     def perform_create(self, serializer):
         """
